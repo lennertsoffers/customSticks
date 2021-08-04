@@ -16,6 +16,19 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 public class ClickEvents implements Listener {
+    private CustomSticks plugin;
+
+    public ClickEvents(CustomSticks plugin) {
+        this.plugin = plugin;
+    }
+
+    private void placePillar(Location location) {
+        for (int i = 0; i < 3; i++) {
+            location.setY(location.getY() + 1.0);
+            location.getBlock().setType(Material.STONE);
+        }
+    }
+
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -34,7 +47,7 @@ public class ClickEvents implements Listener {
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (player.getInventory().getItemInMainHand().equals(ItemManager.explosionStick)) {
-                player.getWorld().createExplosion(event.getClickedBlock().getLocation(), 100f);
+                player.getWorld().createExplosion(event.getClickedBlock().getLocation(), 1.5f);
             }
             else if (player.getInventory().getItemInMainHand().equals(ItemManager.earthStick)) {
                 Location location = event.getClickedBlock().getLocation();
@@ -42,19 +55,15 @@ public class ClickEvents implements Listener {
                 int playerZ = (int) player.getLocation().getZ();
                 int blockX = (int) location.getX();
                 int blockZ = (int) location.getZ() + 1;
-                System.out.println("playerX = " + playerX);
-                System.out.println("playerZ = " + playerZ);
-                System.out.println("blockX = " + blockX);
-                System.out.println("blockZ = " + blockZ);
-                //                    if (playerX == blockX && playerZ == blockZ) {
-//                    }
-                player.setVelocity(new Vector(0, 1 ,0));
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(new CustomSticks(), () -> {
-                    for (int i = 0; i < 4; i++) {
-                        location.getBlock().setType(Material.STONE);
-                        location.setY(location.getY() + 1.0);
-                    }
-                }, 20L);
+
+                if (playerX == blockX && playerZ == blockZ) {
+                    player.setVelocity(new Vector(0, 1 ,0));
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+                        placePillar(location);
+                    }, 3L);
+                } else {
+                    placePillar(location);
+                }
             }
         }
     }

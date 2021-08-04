@@ -5,16 +5,16 @@ import com.lennertsoffers.customsticks.events.PlayerExpChangeEvents;
 import com.lennertsoffers.customsticks.items.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public final class CustomSticks extends JavaPlugin {
-
     @Override
     public void onEnable() {
         ItemManager.init();
-        getServer().getPluginManager().registerEvents(new ClickEvents(), this);
+        getServer().getPluginManager().registerEvents(new ClickEvents(this), this);
         getServer().getPluginManager().registerEvents(new PlayerExpChangeEvents(), this);
 
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {

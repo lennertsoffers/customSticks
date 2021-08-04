@@ -1,13 +1,13 @@
 package com.lennertsoffers.customsticks;
 
+import com.lennertsoffers.customsticks.items.ItemManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CustomSticks extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
-
+        ItemManager.init();
     }
 
     @Override

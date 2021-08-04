@@ -1,0 +1,6 @@
+name: CustomSticks
+version: ${project.version}
+main: com.lennertsoffers.customsticks.CustomSticks
+api-version: 1.16
+authors: [ lennertSoffers ]
+description: A Minecraft Spigot plugin to add custom sticks to your server

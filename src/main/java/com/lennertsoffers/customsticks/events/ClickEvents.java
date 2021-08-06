@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 public class ClickEvents implements Listener {
-    private CustomSticks plugin;
+    private final CustomSticks plugin;
 
     public ClickEvents(CustomSticks plugin) {
         this.plugin = plugin;
@@ -27,6 +27,15 @@ public class ClickEvents implements Listener {
             location.setY(location.getY() + 1.0);
             location.getBlock().setType(Material.STONE);
         }
+    }
+
+    private boolean checkCollision(double player, double block) {
+        if (player > 0) {
+            return !(player < block - 0.3 || player > block + 1.3);
+        } else if (player < 0) {
+            return !(player > block + 0.3 || player < block - 1.3);
+        }
+        return false;
     }
 
     @EventHandler
@@ -51,12 +60,12 @@ public class ClickEvents implements Listener {
             }
             else if (player.getInventory().getItemInMainHand().equals(ItemManager.earthStick)) {
                 Location location = event.getClickedBlock().getLocation();
-                int playerX = (int) player.getLocation().getX();
-                int playerZ = (int) player.getLocation().getZ();
-                int blockX = (int) location.getX();
-                int blockZ = (int) location.getZ() + 1;
+                double playerX = player.getLocation().getX();
+                double playerZ = player.getLocation().getZ();
+                double blockX = location.getX();
+                double blockZ = location.getZ();
 
-                if (playerX == blockX && playerZ == blockZ) {
+                if (checkCollision(playerX, blockX) && checkCollision(playerZ, blockZ)) {
                     player.setVelocity(new Vector(0, 1 ,0));
                     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
                         placePillar(location);

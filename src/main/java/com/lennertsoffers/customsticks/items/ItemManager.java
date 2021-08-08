@@ -23,6 +23,7 @@ public class ItemManager {
     public static ItemStack earthStick;
     public static ItemStack experienceStick;
     public static ItemStack waterBreathingStick;
+    public static ItemStack windStick;
 
     public static void init() {
         createBeaconStick();
@@ -33,6 +34,7 @@ public class ItemManager {
         createEarthStick();
         createExperienceStick();
         createWaterBreathingStick();
+        createWindStick();
     }
 
     private static void createBeaconStick() {
@@ -199,6 +201,27 @@ public class ItemManager {
         recipe.shape("T  ", " H ", "  H");
         recipe.setIngredient('T', Material.TOTEM_OF_UNDYING);
         recipe.setIngredient('H', Material.HEART_OF_THE_SEA);
+        Bukkit.getServer().addRecipe(recipe);
+    }
+
+    private static void createWindStick() {
+        ItemStack stick = new ItemStack(Material.STICK, 1);
+        ItemMeta meta = stick.getItemMeta();
+        meta.setDisplayName(ChatColor.WHITE + "Wind Stick");
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.YELLOW + "Right click with this stick to get trusted up into the air.");
+        lore.add(ChatColor.YELLOW + "Left click with this stick to send a gust forward.");
+        meta.setLore(lore);
+        meta.addEnchant(Enchantment.LUCK, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        stick.setItemMeta(meta);
+
+        windStick = stick;
+
+        ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("wind-stick"), stick);
+        recipe.shape("T  ", " E ", "  E");
+        recipe.setIngredient('T', Material.TOTEM_OF_UNDYING);
+        recipe.setIngredient('E', Material.ELYTRA);
         Bukkit.getServer().addRecipe(recipe);
     }
 }

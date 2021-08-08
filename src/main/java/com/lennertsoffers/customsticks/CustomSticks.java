@@ -4,6 +4,7 @@ import com.lennertsoffers.customsticks.events.ClickEvents;
 import com.lennertsoffers.customsticks.events.PlayerExpChangeEvents;
 import com.lennertsoffers.customsticks.items.ItemManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +20,7 @@ public final class CustomSticks extends JavaPlugin {
 
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getInventory().getItemInOffHand().equals(ItemManager.waterBreathingStick) || player.getInventory().getItemInMainHand().equals(ItemManager.waterBreathingStick)) {
+                if ((player.getInventory().getItemInOffHand().equals(ItemManager.waterBreathingStick) || player.getInventory().getItemInMainHand().equals(ItemManager.waterBreathingStick)) && (player.getWorld().getBlockAt(player.getLocation()).getType().equals(Material.WATER))) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.CONDUIT_POWER, 220, 0));
                 }
             }

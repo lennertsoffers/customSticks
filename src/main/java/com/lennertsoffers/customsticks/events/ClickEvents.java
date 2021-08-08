@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
 public class ClickEvents implements Listener {
@@ -51,29 +52,39 @@ public class ClickEvents implements Listener {
             else if (player.getInventory().getItemInMainHand().equals(ItemManager.strongHoldStick)) {
                 event.getPlayer().getWorld().spawnEntity(event.getPlayer().getEyeLocation(), EntityType.ENDER_SIGNAL);
             }
-
-        }
-
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (player.getInventory().getItemInMainHand().equals(ItemManager.explosionStick)) {
-                player.getWorld().createExplosion(event.getClickedBlock().getLocation(), 1.5f);
+            else if (player.getInventory().getItemInMainHand().equals(ItemManager.windStick)) {
+                player.setVelocity(new Vector(0, 1, 0));
             }
-            else if (player.getInventory().getItemInMainHand().equals(ItemManager.earthStick)) {
-                Location location = event.getClickedBlock().getLocation();
-                double playerX = player.getLocation().getX();
-                double playerZ = player.getLocation().getZ();
-                double blockX = location.getX();
-                double blockZ = location.getZ();
 
-                if (checkCollision(playerX, blockX) && checkCollision(playerZ, blockZ)) {
-                    player.setVelocity(new Vector(0, 1 ,0));
-                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                if (player.getInventory().getItemInMainHand().equals(ItemManager.explosionStick)) {
+                    player.getWorld().createExplosion(event.getClickedBlock().getLocation(), 1.5f);
+                }
+                else if (player.getInventory().getItemInMainHand().equals(ItemManager.earthStick)) {
+                    Location location = event.getClickedBlock().getLocation();
+                    double playerX = player.getLocation().getX();
+                    double playerZ = player.getLocation().getZ();
+                    double blockX = location.getX();
+                    double blockZ = location.getZ();
+
+                    if (checkCollision(playerX, blockX) && checkCollision(playerZ, blockZ)) {
+                        player.setVelocity(new Vector(0, 1 ,0));
+                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+                            placePillar(location);
+                        }, 3L);
+                    } else {
                         placePillar(location);
-                    }, 3L);
-                } else {
-                    placePillar(location);
+                    }
                 }
             }
+        }
+
+        if (event.getAction() == Action.LEFT_CLICK_AIR) {
+            Location playerLocation = player.getLocation();
+            double vectorX = playerLocation.getDirection().getX();
+            double vectorZ = playerLocation.getDirection().getZ();
+
+            player.setVelocity(new Vector(vectorX, 0.0, vectorZ));
         }
     }
 }
